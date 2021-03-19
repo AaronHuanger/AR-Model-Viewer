@@ -70,12 +70,19 @@ public class TapToPlaceObject : MonoBehaviour
                     }
                     break;
                 case TouchPhase.Ended:
-                    if(placementPoseIsValid && Mathf.Abs(direction.x) < MIN_SWIPE_DISTANCE && direction.y < MIN_SWIPE_DISTANCE && !EventSystem.current.IsPointerOverGameObject(touch.fingerId)){
+                    if(placementPoseIsValid && Mathf.Abs(direction.x) < MIN_SWIPE_DISTANCE && direction.y < MIN_SWIPE_DISTANCE && !IsPointerOverUIObject()){
                         PlaceObject();
                     }
                     break;
             } 
         }
+    }
+    private bool IsPointerOverUIObject() {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
     private void PlaceObject()
     {
